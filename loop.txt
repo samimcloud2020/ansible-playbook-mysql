@@ -36,6 +36,25 @@
        
        
        -------------------------------------------
+- name: create new users
+  hosts: hqdev1.tekneed.com
+  tasks:
+     - name: create new users
+       user:
+         name: "{{ item }}"
+         state: present
+       loop:
+         - kehinde
+         - alex
+         - oyin
+         
+         -------------------------------------------------
+       TASK [create new users] *******************************************************************************************************************************
+task path: /home/ubuntu/loop.yaml:10
+changed: [ip-172-31-49-40] => (item=kehinde) => {"ansible_loop_var": "item", "changed": true, "comment": "", "create_home": true, "group": 1002, "home": "/home/kehinde", "item": "kehinde", "name": "kehinde", "shell": "/bin/sh", "state": "present", "system": false, "uid": 1002}
+changed: [ip-172-31-49-40] => (item=alex) => {"ansible_loop_var": "item", "changed": true, "comment": "", "create_home": true, "group": 1003, "home": "/home/alex", "item": "alex", "name": "alex", "shell": "/bin/sh", "state": "present", "system": false, "uid": 1003}
+changed: [ip-172-31-49-40] => (item=oyin) => {"ansible_loop_var": "item", "changed": true, "comment": "", "create_home": true, "group": 1004, "home": "/home/oyin", "item": "oyin", "name": "oyin", "shell": "/bin/sh", "state": "present", "system": false, "uid": 1004}
+------------------------------------------------------------------------------------
        What is {{ item }} in Ansible?
 item is not a command, but a variable automatically created and populated by Ansible in tasks which use loops. In the following 
 example: - debug: msg: "{{ item }}" with_items: - first - second. the task will be run twice: first time with the variable item set to first ,
