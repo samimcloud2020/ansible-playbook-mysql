@@ -12,3 +12,58 @@
          name: httpd
          state: present
        when: ansible_distribution in supported_distros
+       
+       -------------------------------------------------------
+       - name: Install httpd package
+  hosts: all
+  become: yes  
+  vars:
+    supported_distros:
+      - CentOS
+      - Fedora
+      - Ubuntu  
+  tasks:
+     - name: install apache2
+       apt:
+         name: apache2
+         state: latest
+       when: ansible_distribution in supported_distros
+       ---------------------------------------------------------------
+       create a playbook to install the httpd package when the managed host is CentOS 8 or when the managed host is Fedora 28.
+
+- name: Install httpd package
+  hosts: all
+  tasks:
+     - name: install httpd
+       yum:
+         name: httpd
+         state: present
+       when: >
+          ( ansible_distribution == "CentOS"
+            and ansible_distribution_major_version == "8" )
+          or
+          ( ansible_distribution == "Fedora"
+            and ansible_distribution_major_version == "28" )
+            ---------------------------------------------------------------------------
+- name: Install httpd package
+  hosts: all
+  become: yes  
+  tasks:
+     - name: install apache2
+       apt:
+         name: apache2
+         state: present
+       when: 
+          ( ansible_distribution == "CentOS"
+            and ansible_distribution_major_version == "8" )
+          or
+          ( ansible_distribution == "Fedora"
+            and ansible_distribution_major_version == "28" )
+          or 
+          ( ansible_distribution == "Ubuntu"
+            and ansible_distribution_major_version >= "22" )  
+          or
+          ( ansible_distribution == "Debian"
+            and ansible_distribution_major_version == "28" )  
+            -----------------------------------------------------------------------------------
+
