@@ -1,5 +1,6 @@
 - name: create new users
   hosts: hqdev1.tekneed.com
+  become: yes
   tasks:
      - name: create new user1
        user:
@@ -20,6 +21,7 @@
          --------------------------------------
 - name: create new users
   hosts: hqdev1.tekneed.com
+  become: yes
   vars:
      newusers:
        - kehinde
