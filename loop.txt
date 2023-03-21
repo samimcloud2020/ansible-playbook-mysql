@@ -77,6 +77,21 @@ the second time with second
         - name: x3
           groups: finance
           -----------------------------------------
+- name: Add users to groups
+  hosts: all
+  become: yes
+  tasks:
+    - name: add users to their groups
+      user:
+        name: "{{ item.name }}"
+        groups: "{{ item.groups }}"
+      with_items:
+        - { name: 'x1', groups: 'wheel' }
+        - { name: 'x2', groups: 'finance' }
+        - { name: 'x3', groups: 'finance' }
+        
+        ------------------------------------------------------------------
+          
           This can be useful when items have two values, in this case, the user and the group,
           hence one will have to pass an array of dictionaries. The task will iterate over the list of users and groups.
           -----------------------------------------------------
