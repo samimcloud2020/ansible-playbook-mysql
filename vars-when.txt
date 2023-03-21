@@ -1,0 +1,14 @@
+1. create a playbook to install the httpd package if the managed hosts are Centos and Fedora only.
+
+- name: Install httpd package
+  hosts: all
+  vars:
+    supported_distros:
+      - CentOS
+      - Fedora
+  tasks:
+     - name: install httpd
+       yum:
+         name: httpd
+         state: present
+       when: ansible_distribution in supported_distros
