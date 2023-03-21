@@ -59,3 +59,25 @@ changed: [ip-172-31-49-40] => (item=oyin) => {"ansible_loop_var": "item", "chang
 item is not a command, but a variable automatically created and populated by Ansible in tasks which use loops. In the following 
 example: - debug: msg: "{{ item }}" with_items: - first - second. the task will be run twice: first time with the variable item set to first ,
 the second time with second 
+---------------------------------------------------------------------
+
+- name: Add users to groups
+  hosts: all
+  become: yes  
+  tasks:
+    - name: add users to their groups
+      user:
+        name: "{{ item.name }}"
+        groups: "{{ item.groups }}"
+      loop:
+        - name: x1
+          groups: wheel
+        - name: x2
+          groups: finance
+        - name: x3
+          groups: finance
+          -----------------------------------------
+          This can be useful when items have two values, in this case, the user and the group,
+          hence one will have to pass an array of dictionaries. The task will iterate over the list of users and groups.
+          -----------------------------------------------------
+          
