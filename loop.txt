@@ -1,0 +1,40 @@
+- name: create new users
+  hosts: hqdev1.tekneed.com
+  tasks:
+     - name: create new user1
+       user:
+         name: kehinde
+         state: present
+
+     - name: create new user2
+       user:
+         name: alex
+         state: present
+
+     - name: create new user3
+       user:
+         name: oyin
+         state: present
+         
+         
+         --------------------------------------
+- name: create new users
+  hosts: hqdev1.tekneed.com
+  vars:
+     newusers:
+       - kehinde
+       - alex
+       - oyin
+  tasks:
+     - name: create new users
+       user:
+         name: "{{ item }}"
+         state: present
+       loop: "{{ newusers }}"
+       
+       
+       -------------------------------------------
+       What is {{ item }} in Ansible?
+item is not a command, but a variable automatically created and populated by Ansible in tasks which use loops. In the following 
+example: - debug: msg: "{{ item }}" with_items: - first - second. the task will be run twice: first time with the variable item set to first ,
+the second time with second 
