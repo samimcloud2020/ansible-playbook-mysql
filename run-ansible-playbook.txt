@@ -1,0 +1,1 @@
+ubuntu@ip-172-31-57-202:~$ ansible-playbook  /home/ubuntu/1.yaml --key-file ~/.ssh/id_rsa -vv
