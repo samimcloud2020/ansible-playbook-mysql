@@ -62,5 +62,60 @@ Same as stderr, but stderr separates the lines using newlines (\n) characters in
       msg: "The password is {{ mypass.stdout }}"
       -----------------------------------------------------------------------------------------------
       
+      Store Directory Contents
+In this example, I will show you how to store the contents of a directory in a variable using the Ansible register module,
+as well as how to iterate over them.
+
+- hosts: all
+  user: root
+  become: True
+  tasks:
+    - name: List all files and directories in /home/ansible
+      shell: ls /home/ansible
+      register: dir_contents
+    - name: Print directory contents using loops
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ dir_contents.stdout_lines }}"
       
+      -----------------------------------------------------------------------
+      Back Up Directory
+In this example, I will show you how to back up a directory using the Ansible register, file, and copy modules.
+
+- hosts: all
+  user: root
+  become: True
+  tasks:
+    - name: Get home directory /home/ansible contents
+      shell: ls /home/ansible
+      register: dir_contents
+    - name: Create a new directory /tmp/ansible
+      file:
+        path: /tmp/ansible
+        state: directory
+    - name: Backup home directory /home/ansible to /tmp/ansible
+      copy:
+        src: /home/ansible/{{ item }}
+        dest: /tmp/ansible/
+        remote_src: True
+      loop: "{{ dir_contents.stdout_lines }}
+      
+      ------------------------------------------------------------------
+      
+       Run or Skip Tasks
+In this example, I will show you how to run or skip tasks, 
+depending on the variable you have registered, using the register module.
+
+- hosts: ubuntu20
+  user: ansible
+  become: True
+  tasks:
+    - name: List directory contents
+      shell: ls /home/ansible/test3
+      register: dir_contents
+    - name: Check if directory is empty
+      debug:
+        msg: "Directory is empty."
+     when: dir_contents.stdout == ""
+     --------------------------------------------------------------
       
