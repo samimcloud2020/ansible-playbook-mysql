@@ -1,0 +1,26 @@
+Introduction to Ansible Register
+Ansible register is a way to capture the output from task execution and store it in a variable.
+This is an important feature, as this output is different for each remote host, 
+and the basis on that we can use conditions loops to do some other tasks. 
+Also, each register value is valid throughout the playbook execution.
+So, we can make use of set_fact to manipulate the data and provide input to other tasks accordingly. 
+In this article we will learn and see examples of using register in different scenarios.
+We will also see how only a piece of information in the registered variable can be used.
+---------------------------------------------------------------------------------
+- hosts: all
+  user: root
+  become: True
+  tasks:
+    - name: Ensure pwgen is installed
+      apt:
+         name: pwgen
+         state: present
+         update_cache: True
+    - name: Generate password
+      shell: pwgen -N 1 -s 30
+      register: mypass
+    - name: Print the generated password
+      debug:
+      msg: "The password is {{ mypass }}"
+      
+      ------------------------------------------------------------------
