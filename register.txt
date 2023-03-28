@@ -24,3 +24,43 @@ We will also see how only a piece of information in the registered variable can 
       msg: "The password is {{ mypass }}"
       
       ------------------------------------------------------------------
+The most important properties of each of the register variables are as follows:
+
+cmd – The command that ran to generate the output.
+
+stdout – The output of the command.
+
+stderr – The error output of the command.
+
+start – The date and time when the command began executing.
+
+end – The date and time when the command finished executing.
+
+delta – The time taken to run the command. This is the difference between the end and the start properties.
+
+stdout_lines – An array containing each output line of the command.
+Same as stdout, but stdout separates the lines using a newline (\n) characters instead of arrays.
+
+stderr_lines –  An array containing each error output line of the command. 
+Same as stderr, but stderr separates the lines using newlines (\n) characters instead of arrays.
+
+-----------------------------------------------------------------------------------------
+- hosts: all
+  user: root
+  become: True
+  tasks:
+    - name: Ensure pwgen is installed
+      apt:
+         name: pwgen
+         state: present
+         update_cache: True
+    - name: Generate password
+      shell: pwgen -N 1 -s 30
+      register: mypass
+    - name: Print the generated password
+      debug:
+      msg: "The password is {{ mypass.stdout }}"
+      -----------------------------------------------------------------------------------------------
+      
+      
+      
