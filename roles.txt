@@ -56,3 +56,112 @@ library - Embedding Modules and Plugins in Roles (Not created by init command).
 If required one can define custom module in python in this folder and use it in the tasks.
 
 ---------------------------------------------------------------------------------
+
+root@ip-172-31-82-195:~# mkdir dir1
+root@ip-172-31-82-195:~# cd dir1
+root@ip-172-31-82-195:~/dir1# mkdir roles
+root@ip-172-31-82-195:~/dir1# cd roles
+root@ip-172-31-82-195:~/dir1/roles# vim roles.yml
+root@ip-172-31-82-195:~/dir1/roles# cd ..
+
+root@ip-172-31-82-195:~/dir1# cd roles
+root@ip-172-31-82-195:~/dir1/roles# ansible-galaxy init package
+- Role package was created successfully
+root@ip-172-31-82-195:~/dir1/roles# ls
+package  roles.yml
+root@ip-172-31-82-195:~/dir1/roles# cd package
+root@ip-172-31-82-195:~/dir1/roles/package# ls
+README.md  defaults  handlers  meta  tasks  tests  vars
+root@ip-172-31-82-195:~/dir1/roles/package# cd tests
+root@ip-172-31-82-195:~/dir1/roles/package/tests# vim main.yml
+root@ip-172-31-82-195:~/dir1/roles/package/tests# cd ..
+root@ip-172-31-82-195:~/dir1/roles/package# cd ..
+root@ip-172-31-82-195:~/dir1/roles# cd ..
+root@ip-172-31-82-195:~/dir1# tree
+.
+└── roles
+    ├── package
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── tests
+    │   │   ├── inventory
+    │   │   ├── main.yml
+    │   │   └── test.yml
+    │   └── vars
+    │       └── main.yml
+    └── roles.yml
+
+8 directories, 10 files
+root@ip-172-31-82-195:~/dir1# cd roles
+
+root@ip-172-31-82-195:~/dir1/roles# ls
+package  roles.yml
+root@ip-172-31-82-195:~/dir1/roles# cd ..
+
+root@ip-172-31-82-195:~/dir1# tree
+.
+└── roles
+    ├── package
+    │   ├── README.md
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── tests
+    │   │   ├── inventory
+    │   │   ├── main.yml
+    │   │   └── test.yml
+    │   └── vars
+    │       └── main.yml
+    └── roles.yml
+
+8 directories, 10 files
+
+root@ip-172-31-82-195:~/dir1/roles# ansible-playbook -i inventory roles.yml
+[WARNING]: Unable to parse /root/dir1/roles/inventory as an inventory source
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [localhost] **************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************
+ok: [localhost]
+
+PLAY RECAP ********************************************************************************************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+root@ip-172-31-82-195:~/dir1/roles# 
+
+
+root@ip-172-31-82-195:~/dir1/roles# cat roles.yml
+---
+- hosts: localhost
+  become: true
+  roles:
+    - /root/dir1/roles/package
+    
+    
+root@ip-172-31-82-195:~/dir1/roles# cd package
+root@ip-172-31-82-195:~/dir1/roles/package# cd tests
+root@ip-172-31-82-195:~/dir1/roles/package/tests# cat main.yml
+---
+# tasks file for nginx
+- name: Install Nginx
+  ansible.builtin.package:
+    name: nginx 
+    state: latest
+- name: Start Nginx Service
+  ansible.builtin.service:
+    name: nginx 
+    state: started
